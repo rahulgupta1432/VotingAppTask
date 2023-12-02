@@ -39,7 +39,7 @@ A simple web application for managing votes with two user interfaces: admin/sub-
 ### Usage
 
 1. Run the application: `npm start`
-2. Open your browser and navigate to [http://localhost:3000](http://localhost:3301)
+2. Open your browser and navigate to [http://localhost:3301](http://localhost:3301)
 
 ## Screenshots
 
