@@ -1,0 +1,11 @@
+{
+      "port":"3301",
+      "mysql":{
+            "localhost":"",
+            "username":"root",
+            "password":"root",
+            "port":"3308",
+            "database":"votingapp",
+            "dialect":"mysql"
+      }
+}

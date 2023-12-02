@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Table to PDF</title>
+</head>
+
+<body>
+  <table id="dataTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <!-- Add more headers as needed -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>John Doe</td>
+        <td>john@example.com</td>
+        <!-- Add more rows as needed -->
+      </tr>
+    </tbody>
+  </table>
+
+  <button onclick="generatePDF()">Generate PDF</button>
+
+  <script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+  <script>
+    function generatePDF() {
+      const element = document.getElementById('dataTable');
+      html2pdf(element);
+    }
+  </script>
+</body>
+
+</html>

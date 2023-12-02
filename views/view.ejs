@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <title>View Details</title>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+      <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+      <style>
+            .container {
+                  display: flex;
+                  justify-content: center;
+                  padding-right: 400px;
+
+            }
+
+            .table {
+                  width: 100vh;
+                  text-align: center;
+            }
+
+            td {
+                  font-family: 'Times New Roman', Times, serif;
+            }
+
+            table,
+            tr,
+            td {
+                  height: 50px;
+                  width: 400px;
+            }
+
+            h1 {
+                  text-align: center;
+                  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+                  margin-top: 1%;
+                  color: rgb(169, 112, 223);
+            }
+
+            .anchor {
+                  padding-left: 250px;
+            }
+
+            /* sppin */
+            #button {
+                  display: block;
+                  margin: 20px auto;
+                  padding: 10px 30px;
+                  background-color: #eee;
+                  border: solid #ccc 1px;
+                  cursor: pointer;
+            }
+
+            #overlay {
+                  position: fixed;
+                  top: 0;
+                  z-index: 100;
+                  width: 100%;
+                  height: 100%;
+                  display: none;
+                  background: rgba(0, 0, 0, 0.6);
+            }
+
+            .cv-spinner {
+                  height: 100%;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+            }
+
+            .spinner {
+                  width: 40px;
+                  height: 40px;
+                  border: 4px #ddd solid;
+                  border-top: 4px #2e93e6 solid;
+                  border-radius: 50%;
+                  animation: sp-anime 0.8s infinite linear;
+            }
+
+            @keyframes sp-anime {
+                  100% {
+                        transform: rotate(360deg);
+                  }
+            }
+
+            .is-hide {
+                  display: none;
+            }
+      </style>
+</head>
+
+<body>
+      <button id="button" auto hidden></button>
+      <div id="overlay">
+            <div class="cv-spinner" hidden><span class="spinner"></span></div>
+      </div>
+      <%-include("menu.ejs")%>
+            <h1>Details View</h1>
+            <div class="container">
+                  <div class="row pt-5">
+                        <center>
+                              <table class="table table-bordered table-hover table-bordered">
+                                    <thead>
+                                          <tr>
+                                                <th>ID</th>
+                                                <th>Email</th>
+                                                <th>Name</th>
+                                                <th>Role</th>
+                                                <th>Contact</th>
+                                                <th>Candidate</th>
+                                          </tr>
+                                    </thead>
+                                    <tbody>
+                                          <%for(let i of data){%>
+                                                <tr>
+                                                      <td>
+                                                            <%=i.id%>
+                                                      </td>
+                                                      <td>
+                                                            <%=i.email%>
+                                                      </td>
+                                                      <td>
+                                                            <%=i.username%>
+                                                      </td>
+                                                      <td>
+                                                            <%=i.role%>
+                                                      </td>
+                                                      <td>
+                                                            <%=i.contact%>
+                                                      </td>
+                                                      <td>
+                                                            <%=i.member%>
+                                                      </td>
+                                                </tr>
+                                                <%}%>
+                                    </tbody>
+                              </table>
+                        </center>
+                        <a href="/admin" class="mt-4 pt-2 anchor"><input type="button" value="Back to Admin Dashboard"
+                                    class="btn btn-outline-secondary"></a>
+                  </div>
+            </div>
+            <script>
+                  window.onload = () => $('#button').click();
+                  jQuery($ => {
+                        $(document).ajaxSend(() => $("#overlay").fadeIn(300));
+                        $('#button').click(() => $.ajax({ type: 'GET', success: data => console.log(data) }).done(() => setTimeout(() => $("#overlay").fadeOut(400), 500)));
+                  });
+            </script>
+</body>
+
+</html>

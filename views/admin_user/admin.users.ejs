@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <title>View Details</title>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+      <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+      <script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+      <style>
+            /* sppin */
+            #button {
+                  display: block;
+                  margin: 20px auto;
+                  padding: 10px 30px;
+                  background-color: #eee;
+                  border: solid #ccc 1px;
+                  cursor: pointer;
+            }
+
+            #overlay {
+                  position: fixed;
+                  top: 0;
+                  z-index: 100;
+                  width: 100%;
+                  height: 100%;
+                  display: none;
+                  background: rgba(0, 0, 0, 0.6);
+            }
+
+            .cv-spinner {
+                  height: 100%;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+            }
+
+            .spinner {
+                  width: 40px;
+                  height: 40px;
+                  border: 4px #ddd solid;
+                  border-top: 4px #2e93e6 solid;
+                  border-radius: 50%;
+                  animation: sp-anime 0.8s infinite linear;
+            }
+
+            @keyframes sp-anime {
+                  100% {
+                        transform: rotate(360deg);
+                  }
+            }
+
+            .is-hide {
+                  display: none;
+            }
+
+            .table {
+                  width: 60%;
+                  margin: auto;
+                  text-align: center;
+                  border: 1px solid rgb(188, 188, 124);
+            }
+
+            h1 {
+                  text-align: center;
+                  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+                  margin-top: 1%;
+                  color: rgb(169, 112, 223);
+            }
+      </style>
+</head>
+
+<body>
+      <button id="button" auto hidden></button>
+      <div id="overlay">
+            <div class="cv-spinner" hidden><span class="spinner"></span></div>
+      </div>
+      <%-include("../menu.ejs")%>
+            <h1>All Users Records</h1>
+            <div class="container">
+                  <table class="table table-bordered table-hover table-bordered" class="table table-striped">
+                        <thead>
+                              <tr>
+                                    <th>ID</th>
+                                    <th>DB ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Contact</th>
+                                    <th>Status</th>
+                                    <th>Modify</th>
+                                    <th>Action</th>
+                              </tr>
+                        </thead>
+                        <tbody>
+                              <%let sr=1%>
+                                    <%for(let i of data){%>
+                                          <tr>
+                                                <td>
+                                                      <%=sr%>
+                                                            <%sr++%>
+                                                </td>
+                                                <td>
+                                                      <%=i.id%>
+                                                </td>
+                                                <td>
+                                                      <%=i.name%>
+                                                </td>
+                                                <td>
+                                                      <%=i.email%>
+                                                </td>
+                                                <td>
+                                                      <%=i.role%>
+                                                </td>
+                                                <td>
+                                                      <%=i.contact%>
+                                                </td>
+                                                <% if (i.token !=="" && i.token !==null) { %>
+                                                      <td><button class="btn btn-outline-success">Active</button></td>
+                                                      <% } else { %>
+                                                            <td><button class="btn btn-outline-danger">Inactive</button></td>
+                                                            <% } %>
+
+
+
+                                                                  <td>
+                                                                        <a href="/admin/users/<%=i.id%>"><button
+                                                                                    class="btn btn-outline-warning">Edit</button></a>
+                                                                  </td>
+                                                                  <td>
+                                                                        <button
+                                                                              class="btn btn-outline-danger mt-1">Delete</button>
+                                                                  </td>
+                                          </tr>
+                                          <%}%>
+                        </tbody>
+                  </table>
+            </div>
+            <div class="container" style="align-items: center; text-align: center;">
+                  <div class="col-sm-12 mt-4">
+                        <%let totalPage=Math.ceil(total/limit)%>
+                              <%for(let i=1;i<=totalPage;i++){%>
+                                    <%let url=`/admin/users?limit=${limit}&&page=${page}`%>
+                                          <a href="<%=url%>" class="btn btn-outline-secondary">
+                                                <%=i%>
+                                          </a>
+                                          <%}%>
+                  </div>
+            </div>
+            <a href="/admin" class="mt-4 pt-1 d-flex anchor"
+                  style="justify-content: center; text-decoration: none;"><input type="button" value="Back to Dashboard"
+                        class="btn btn-outline-secondary"></a>
+            <a href="/admin/users/pdf" class="mt-2 pt-2 d-flex anchor"
+                  style="justify-content: center; text-decoration: none;" id="dataTable" onclick="generatePDF()"
+                  target="_blank"><input type="button" value="Generate PDF" class="btn btn-outline-info"></a>
+            <!-- </div> -->
+            <script>
+                  window.onload = () => $('#button').click();
+                  jQuery($ => {
+                        $(document).ajaxSend(() => $("#overlay").fadeIn(300));
+                        $('#button').click(() => $.ajax({ type: 'GET', success: data => console.log(data) }).done(() => setTimeout(() => $("#overlay").fadeOut(400), 500)));
+                  });
+                  function generatePDF() {
+                        const element = document.getElementById('dataTable');
+                        html2pdf(element);
+                  }
+            </script>
+</body>
+
+</html>
+
+<script>
+      function generatePDF() {
+            const element = document.getElementById('dataTable');
+            html2pdf(element);
+      }
+</script>
